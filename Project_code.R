@@ -20,6 +20,8 @@ install.packages("png")
 Apr19_Dec21 <- read.csv(unz(here("data","Zipped_total_data.zip"),"April2019_Dec2021.csv")) 
 Jul21_Jun22 <- read.csv(unz(here("data","Zipped_total_data.zip"),"July2021_June2022.csv"))
 
+#new_df <- subset(df, b != 7 & d != 38)
+# do a keep vs elim func i think and merge first
 
 # keeping only new referral data
 c1Apr19_Dec21 <- Apr19_Dec21[Apr19_Dec21$METRIC == 'ASD12',]
