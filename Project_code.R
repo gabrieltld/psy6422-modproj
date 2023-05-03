@@ -14,6 +14,7 @@ install.packages("png")
 # https://digital.nhs.uk/data-and-information/publications/statistical/autism-statistics/april-2019-to-december-2021
 # https://digital.nhs.uk/data-and-information/publications/statistical/autism-statistics/july-2021-to-june-2022
 
+#add a function for repeating lines somehow or compress but ideally need a function
 
 # import data as data frames
 Apr19_Dec21 <- read.csv(unz(here("data","Zipped_total_data.zip"),"April2019_Dec2021.csv")) 
