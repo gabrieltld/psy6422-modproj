@@ -66,8 +66,8 @@ initialplot <- ggplot(ref_age_date, aes(x = REPORTING_PERIOD_START, y = METRIC_V
 initialplot
 
 # x values for annotations on barplot
-lockdown1 <- tail(which(ref_age_date[,1] == "2020-03-01"),1)
-lockdown_text_place <- tail(which(ref_age_date[,1] == "2020-02-01"),1)
+lockdown1 <- fval_tail(ref_age_date,1,"2020-03-01")
+lockdown_text_placement <- fval_tail(ref_age_date,1,"2020-02-01")
 
 #plotting a bar chart
 barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,y=METRIC_VALUE)) +
@@ -84,7 +84,7 @@ barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,y=METRIC_VALUE)) +
   labs(title="New autism referrals each month by age from April 2019 - June 2022", x="Date", y="Number of Referrals Across England", fill = "Age Groups:")+
   scale_fill_manual(values=c("#FF6A6A", "#FFA54F", "#FFEC8B", "#90EE90", "#7EC0EE","#7A67EE","#FFF0F5"))+
   geom_vline(xintercept = ref_age_date[lockdown1,1])+
-  annotate("text", x= ref_age_date[lockdown_text_place,1], y=7600, label="Start of 1st Lockdown in England", angle=90)
+  annotate("text", x= ref_age_date[lockdown_text_placement,1], y=7600, label="Start of 1st Lockdown in England", angle=90)
 
 #viewing the bar chart
 barplot
