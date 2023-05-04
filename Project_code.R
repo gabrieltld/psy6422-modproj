@@ -16,54 +16,41 @@ install.packages("png")
 
 #add a function for repeating lines somehow or compress but ideally need a function
 
-# import data as data frames
 Apr19_Dec21 <- read.csv(unz(here("data","Zipped_total_data.zip"),"April2019_Dec2021.csv")) 
 Jul21_Jun22 <- read.csv(unz(here("data","Zipped_total_data.zip"),"July2021_June2022.csv"))
 
-#new_df <- subset(df, b != 7 & d != 38)
-# do a keep vs elim func i think and merge first
+#making a function
+fval_tail <- function(df,col_num,value) {
+  #find a value in the data fram that matches input, find the element number of the last instance of this
+  index <- which(df[,col_num] == value)
+  output <- tail(index,1)
+}
 
-# keeping only new referral data
-c1Apr19_Dec21 <- Apr19_Dec21[Apr19_Dec21$METRIC == 'ASD12',]
-c1Jul21_Jun22 <- Jul21_Jun22[Jul21_Jun22$METRIC == 'ASD12',]
-
-# keeping only age-related data
-c2Apr19_Dec21 <- c1Apr19_Dec21[c1Apr19_Dec21$SECONDARY_LEVEL != 'NONE',]
-c2Jul21_Jun22 <- c1Jul21_Jun22[c1Jul21_Jun22$SECONDARY_LEVEL != 'NONE',]
-
-# keeping only CCG data
-c2Apr19_Dec21 <- c2Apr19_Dec21[c2Apr19_Dec21$BREAKDOWN != 'CCG - GP Practice or Residence; Age Group',]
-c2Jul21_Jun22 <- c2Jul21_Jun22[c2Jul21_Jun22$BREAKDOWN != 'CCG - GP Practice or Residence; Age Group',]
-
-#find the last date of the first dataset and the first of the second dataset
-tail(c2Apr19_Dec21, n=1)
-head(c2Jul21_Jun22, n=1)
-
-#find the last row that is a duplicate
-index <- which(c2Jul21_Jun22[,2] == "31/12/2021")
-lastdupind <- tail(index,1)
 
 #create a new dataframe for the second dataset with only dates after this
-c3Jul21_Jun22 <- c2Jul21_Jun22[-c(1:lastdupind),]
+lastdupind <- fval_tail(Jul21_Jun22,1,tail(Apr19_Dec21$REPORTING_PERIOD_START, n=1))
+nondup_Jun21_Jul22 <- Jul21_Jun22[-c(1:lastdupind),]
 
-#making one big dataframe with no duplicates
-merged_Apr19_Jun22 <- rbind(c2Apr19_Dec21,c3Jul21_Jun22)
+#merge
+merged <- rbind(Apr19_Dec21,nondup_Jun21_Jul22)
+merged_subset <- subset(merged,merged$METRIC == 'ASD12' & 
+                          merged$SECONDARY_LEVEL != 'NONE' & 
+                          merged$BREAKDOWN != 'CCG - GP Practice or Residence; Age Group')
 
-#changing date values from character class to date format
-#changing referral numbers from character to numeric
-classformattedmerged <- mutate(merged_Apr19_Jun22,REPORTING_PERIOD_START = as.Date(REPORTING_PERIOD_START, format = "%d/%m/%Y")) 
-classformattedmerged <- mutate(classformattedmerged,REPORTING_PERIOD_END = as.Date(REPORTING_PERIOD_END, format = "%d/%m/%Y"))
-classformattedmerged <- mutate(classformattedmerged,METRIC_VALUE = as.numeric(METRIC_VALUE))
+#format the data classes
+classform_ms <- mutate(merged_subset,REPORTING_PERIOD_START = as.Date(REPORTING_PERIOD_START, format = "%d/%m/%Y")) 
+classform_ms <- mutate(classform_ms,REPORTING_PERIOD_END = as.Date(REPORTING_PERIOD_END, format = "%d/%m/%Y"))
+classform_ms <- mutate(classform_ms,METRIC_VALUE = as.numeric(METRIC_VALUE))
 
 #removing any NA/unknown values
-formatted_values_only <- classformattedmerged[!is.na(classformattedmerged$METRIC_VALUE),]
-formatted_values_only <- classformattedmerged[classformattedmerged$SECONDARY_LEVEL != "UNKNOWN",]
+valonly_full <- classform_ms[!is.na(classform_ms$METRIC_VALUE),]
+valonly_full <- classform_ms[classform_ms$SECONDARY_LEVEL != "UNKNOWN",]
 
 #making the legend label order in age order
-formatted_values_only$SECONDARY_LEVEL[formatted_values_only$SECONDARY_LEVEL == 'Under 18'] <- '0 - 17'
+valonly_full$SECONDARY_LEVEL[valonly_full$SECONDARY_LEVEL == 'Under 18'] <- '0 - 17'
 
 #Sum by age and date
-ref_age_date <- aggregate(METRIC_VALUE ~ REPORTING_PERIOD_START + SECONDARY_LEVEL, data = formatted_values_only, FUN = "sum")
+ref_age_date <- aggregate(METRIC_VALUE ~ REPORTING_PERIOD_START + SECONDARY_LEVEL, data = valonly_full, FUN = "sum")
 ref_age_date <- data.frame(ref_age_date)
 
 
@@ -79,8 +66,8 @@ initialplot <- ggplot(ref_age_date, aes(x = REPORTING_PERIOD_START, y = METRIC_V
 initialplot
 
 # x values for annotations on barplot
-lockdown1 <- head(which(ref_age_date[,1] == "2020-03-01"),1)
-lockdown_text_place <- head(which(ref_age_date[,1] == "2020-02-01"),1)
+lockdown1 <- tail(which(ref_age_date[,1] == "2020-03-01"),1)
+lockdown_text_place <- tail(which(ref_age_date[,1] == "2020-02-01"),1)
 
 #plotting a bar chart
 barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,y=METRIC_VALUE)) +
