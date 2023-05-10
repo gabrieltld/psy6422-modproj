@@ -62,7 +62,8 @@ initialplot <- ggplot(ref_age_date, aes(x = REPORTING_PERIOD_START, y = METRIC_V
   scale_color_manual(values=c("#FF6A6A", "#FFA54F", "#FFEC8B", "#90EE90", "#7EC0EE","#7A67EE","#8B8386")) + 
   geom_point(shape = 1,size = 1.5,colour = "black")
 
-#viewing initial plot
+#viewing and saving initial plot
+ggsave(here("visualisations","initialplot.png"),height = 8, width = 13)
 initialplot
 
 # x values for annotations on barplot
@@ -86,28 +87,19 @@ barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,y=METRIC_VALUE)) +
   geom_vline(xintercept = ref_age_date[lockdown1,1])+
   annotate("text", x= ref_age_date[lockdown_text_placement,1], y=7600, label="Start of 1st Lockdown in England", angle=90)
 
-#viewing the bar chart
+#viewing and saving the bar chart
+ggsave(here("visualisations","barplot.png"),height = 8, width = 13)
 barplot
 
 
 ## animating the plot
-anim2 <- barplot + 
+anim <- barplot + 
   transition_states(REPORTING_PERIOD_START,transition_length = 2,state_length = 1) + 
   shadow_mark() 
 
 #viewing the animated plot
-anim2
+anim
 
 #saving the animated plot as a gif
-barplot_anim_gif <- animate(anim2,height = 8, width = 13, units = "in", res = 250, renderer =gifski_renderer("barplot_gif", loop=FALSE))
-anim_save("barplot_anim_gif")
-
-
-
-
-# Needed only on Windows - run once per R session
-# Adjust the path to match your installation of Ghostscript
-#Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.05/bin/gswin32c.exe")
-#embed_fonts("font_plot.pdf", outfile="font_plot_embed.pdf")
-#embed_fonts("font_ggplot.pdf", outfile="font_ggplot_embed.pdf")
-# If outfile is not specified, it will overwrite the original file
+barplot_anim_gif <- animate(anim,height = 8, width = 13, units = "in", res = 250, renderer =gifski_renderer("barplot_gif", loop=TRUE))
+anim_save(here("visualisations","barplot_anim_gif"))
