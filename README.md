@@ -4,4 +4,4 @@ I am using data from NHS digital about autism referral numbers, types and waitin
 
 The data I am using comes from two separate, overlapping, datasets available at: https://digital.nhs.uk/data-and-information/publications/statistical/autism-statistics/april-2019-to-december-2021 https://digital.nhs.uk/data-and-information/publications/statistical/autism-statistics/july-2021-to-june-2022 For each time period respectively.
 
-The full codebook can be found on the websites above or on the codebook file on this repository.
+The full codebook can be found on the websites above or on the codebook file on this repository (within "data").
