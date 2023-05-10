@@ -1,6 +1,5 @@
 ---
 title: "Module Project"
-author: "Gabriel Dawes"
 output: html_document
 date: "`r Sys.Date()`"
 code_folding: show
@@ -124,7 +123,7 @@ plot(initialplot)
 
 I next tried visualising the data as a stacked bar chart. This is because I wanted the 
 number of referrals and categories to be more visible and because I wanted to highlight 
-the age group composition and make the proportions more directly comparable.
+the age group composition and make the proportions more directly comparable. This visualisation method also works well with the data's discerete age group categories.
 
 
 ```{r echo= TRUE,warning = FALSE, message = FALSE, fig.width= 11,fig.height= 6}
@@ -156,7 +155,7 @@ plot(barplot)
 ```
 
 
-To emphasise the time course component of this data I animated the plot so that the data would be gradually revealed along the x-axis.
+Finally, to emphasise the time course component of this data I animated the plot so that the data would be gradually revealed along the x-axis. This draws attention to trends over time in the data alongside differences in age-group proportions.
 
 
 ```{r warning = FALSE, message = FALSE, fig.width = 11, fig.asp = 0.6}
@@ -174,4 +173,4 @@ There is a clear decrease in autism referrals after the initial COVID-19 lockdow
 
 However, this data is visualisation is limited in terms of its ability to answer the research question in that it only considers data from NHS CCGs (Clinical Commissioning Groups) and data submission is voluntary for non-NHS funded referrals. This means that data concerning private referrals is largely missing. People may be more likely to seek a private referral if they have struggled to obtain one from their NHS GP and as a result this may mean the referral numbers for adults is underestimated as autism is still traditionally seen as a condition only impacting or being diagnosed in children. 
 
-It would be interesting to see if this pattern varied geographically given that the data was recorded for each practice centre and so could be plotted onto a map or potentially to look at the breakdown of these results by sex as there is a disparity in the number of males vs females diagnosed with autism (generally ranging from 5:1-2:1 depending on the study, [Napolitano et al 2022](https://www.frontiersin.org/articles/10.3389/fpsyt.2022.889636/full#B4)) and it would be interesting to see if this is reflected by a similar trend for referrals or if this is a pattern that emerges at the asessment stage of diagnosis.
+It would be interesting to see if this pattern varied geographically given that the data was recorded for each practice centre and so could be plotted onto a map or potentially to look at the breakdown of these results by sex as there is a disparity in the number of males vs females diagnosed with autism (generally ranging from 5:1-2:1 depending on the study, [Napolitano et al 2022](https://www.frontiersin.org/articles/10.3389/fpsyt.2022.889636/full#B4)) and it would be interesting to see if this is reflected by a similar trend for referrals or if this is a pattern that emerges at the assessment stage of diagnosis.
