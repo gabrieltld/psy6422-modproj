@@ -88,11 +88,11 @@ barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,y=METRIC_VALUE)) +
   annotate("text", x= ref_age_date[lockdown_text_placement,1], y=7600, label="Start of 1st Lockdown in England", angle=90)
 
 #viewing and saving the bar chart
-ggsave(here("visualisations","barplot.png"),height = 8, width = 13)
+ggsave(here("visualisations","viz220225546.png"),height = 8, width = 13)
 barplot
 
 
-## animating the plot
+#animating the plot
 anim <- barplot + 
   transition_states(REPORTING_PERIOD_START,transition_length = 2,state_length = 1) + 
   shadow_mark() 

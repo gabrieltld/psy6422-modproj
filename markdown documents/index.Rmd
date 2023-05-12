@@ -1,23 +1,24 @@
 ---
-title: "Module Project"
-output: pdf_document
+title: "Module Project - PSY6422"
+output: html_document
 date: "`r Sys.Date()`"
-header-includes:
-   - \usepackage{animate}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 #packages
 library(here)
 library(tidyverse)
 library(extrafont)
+library(ggplot2)
 library("data.table")
 library(extrafont)
 install.packages("kableExtra", repos = 'https://www.stats.bris.ac.uk/R/')
 install.packages('tinytex',repos = 'https://www.stats.bris.ac.uk/R/')
 tinytex::install_tinytex(force = TRUE)
 library(gganimate)
+install.packages("gifski",repos = 'https://www.stats.bris.ac.uk/R/')
 ```
 
 # **Changes in the number of referrals for autism diagnostic assessment before, during, and after lockdown in England by age group:**
@@ -48,6 +49,7 @@ Data was taken from NHS digital who began publishing monthly statistics for the 
 The data was recorded in this format:
 Note that column names were abbreviated for the sake of simplicity.
 
+
 ```{r echo=FALSE, warning = FALSE, message = FALSE, options(warn=0)}
 
 #loading data
@@ -56,12 +58,9 @@ brief_glance <- head(Apr19_Dec21[Apr19_Dec21$METRIC == 'ASD12' &
                                    Apr19_Dec21$SECONDARY_LEVEL != 'NONE'
                                  & Apr19_Dec21$METRIC_VALUE != '*',], n=3)
 #showing table
-brief_glance
+tableh <- knitr::kable(head(brief_glance), "html", col.names = c("RPS","RPE","S","B","PL","PLD","SL","SLD","M","MD","MV"))
+kableExtra:: kable_styling(tableh,bootstrap_options = c("striped", 'condensed', "scale_down" ),position = "left", font_size = 10) 
 
-#below is the alternative code for html output that is not compatible with pdf
-#tableh <- knitr::kable(head(brief_glance), "html", col.names = c("RPS","RPE","S","B","PL","PLD","SL","SLD","M","MD","MV"))
-#kableExtra:: kable_styling(tableh,bootstrap_options = 
-#c("striped", 'condensed', "scale_down" ),position = "left", font_size = 10) 
 ```
 
 
@@ -72,13 +71,13 @@ These datasets were very large and included metrics that this analysis was unint
 
 ```{r warning = FALSE, message = FALSE}
 
-#loading in the data
+#housekeeping
 Apr19_Dec21 <- read.csv(unz(here("data","Zipped_total_data.zip"),"April2019_Dec2021.csv")) 
 Jul21_Jun22 <- read.csv(unz(here("data","Zipped_total_data.zip"),"July2021_June2022.csv"))
 
 #making a function
 fval_tail <- function(df,col_num,value) {
-  #find a value in the data frame that matches input 'value', find the element number of the last 
+  #find a value in the data frame that matches input, find the element number of the last 
   #instance of this
   index <- which(df[,col_num] == value)
   output <- tail(index,1)
@@ -91,15 +90,11 @@ nondup_Jun21_Jul22 <- Jul21_Jun22[-c(1:lastdupind),]
 
 #merge
 merged <- rbind(Apr19_Dec21,nondup_Jun21_Jul22)
-merged_subset <- subset(merged,merged$METRIC == 'ASD12' & 
-                          merged$SECONDARY_LEVEL != 'NONE' & 
-                          merged$BREAKDOWN != 'CCG - GP Practice or Residence; Age Group')
+merged_subset <- subset(merged,merged$METRIC == 'ASD12' & merged$SECONDARY_LEVEL != 'NONE' & merged$BREAKDOWN != 'CCG - GP Practice or Residence; Age Group')
 
 #format the data classes
-classform_ms <- mutate(merged_subset,REPORTING_PERIOD_START = 
-                         as.Date(REPORTING_PERIOD_START, format = "%d/%m/%Y")) 
-classform_ms <- mutate(classform_ms,REPORTING_PERIOD_END = 
-                         as.Date(REPORTING_PERIOD_END, format = "%d/%m/%Y"))
+classform_ms <- mutate(merged_subset,REPORTING_PERIOD_START = as.Date(REPORTING_PERIOD_START, format = "%d/%m/%Y")) 
+classform_ms <- mutate(classform_ms,REPORTING_PERIOD_END = as.Date(REPORTING_PERIOD_END, format = "%d/%m/%Y"))
 classform_ms <- mutate(classform_ms,METRIC_VALUE = as.numeric(METRIC_VALUE))
 
 #removing any NA/unknown values
@@ -110,8 +105,7 @@ valonly_full <- classform_ms[classform_ms$SECONDARY_LEVEL != "UNKNOWN",]
 valonly_full$SECONDARY_LEVEL[valonly_full$SECONDARY_LEVEL == 'Under 18'] <- '0 - 17'
 
 #Sum by age and date
-ref_age_date <- aggregate(METRIC_VALUE ~ REPORTING_PERIOD_START + SECONDARY_LEVEL, 
-                          data = valonly_full, FUN = "sum")
+ref_age_date <- aggregate(METRIC_VALUE ~ REPORTING_PERIOD_START + SECONDARY_LEVEL, data = valonly_full, FUN = "sum")
 ref_age_date <- data.frame(ref_age_date)
 
 ```
@@ -122,20 +116,17 @@ ref_age_date <- data.frame(ref_age_date)
 I initially visualised the data using a scatter plot but found it difficult to interpret as the points were small and often overlapped, especially for the older age groups with smaller referral numbers.
  
  
-```{r echo= TRUE, warning = FALSE, message = FALSE, fig.width= 11,fig.height= 6}
+```{r echo= TRUE, warning = FALSE, message = FALSE, fig.width= 11, fig.height= 6}
 
-#create an initial visualisation - here, a scatterplot
-initialplot <- ggplot(ref_age_date, aes(x = REPORTING_PERIOD_START, 
-                                        y = METRIC_VALUE, color = SECONDARY_LEVEL)) +
+#initial visualisation - here, a scatterplot
+initialplot <- ggplot(ref_age_date, aes(x = REPORTING_PERIOD_START, y = METRIC_VALUE, color = SECONDARY_LEVEL))+
   geom_point(size = 1.5) +
-  labs(title = "New autism referrals each month by age from 2019-mid2022", 
-       x = "date", y = "Number of New Referrals") +
+  labs(title = "New autism referrals each month by age from 2019-mid2022", x = "date", y = "Number of New Referrals") +
   guides(color=guide_legend("Age Group"))+
-  scale_color_manual(values=c("#FF6A6A", "#FFA54F", "#FFEC8B", "#90EE90", 
-                              "#7EC0EE","#7A67EE","#8B8386")) + 
+  scale_color_manual(values=c("#FF6A6A", "#FFA54F", "#FFEC8B", "#90EE90", "#7EC0EE","#7A67EE","#8B8386")) + 
   geom_point(shape = 1,size = 1.5,colour = "black")
 
-#plot
+#show plot
 plot(initialplot)
 
 ```
@@ -146,40 +137,28 @@ number of referrals and categories to be more visible and because I wanted to hi
 the age group composition and make the proportions more directly comparable. This visualisation method also works well with the data's discerete age group categories.
 
 
-```{r echo= TRUE,warning = FALSE, message = FALSE, fig.width= 11,fig.height= 6}
+```{r echo= TRUE,warning = FALSE, message = FALSE, fig.width= 11, fig.height= 6}
 
-#x values for annotations on barplot
+# x values for annotations on barplot
 lockdown1 <- fval_tail(ref_age_date,1,"2020-03-01")
 lockdown_text_placement <- fval_tail(ref_age_date,1,"2020-02-01")
 
-#designing plot
-barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,
-                                    y=METRIC_VALUE)) +
-  geom_bar(aes(fill=SECONDARY_LEVEL), stat='identity', 
-           colour='black', width=20)+ 
-  scale_y_continuous(breaks=seq(0,10500,500),expand = c(0,0), 
-                     limits = c(0, 10500))+
-  scale_x_date(date_breaks = '1 month', date_labels = "%b-%Y", 
-               expand = expansion(add = 2))+
+# designing plot
+barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,y=METRIC_VALUE)) +
+  geom_bar(aes(fill=SECONDARY_LEVEL), stat='identity', colour='black', width=20)+ 
+  scale_y_continuous(breaks=seq(0,10500,500),expand = c(0,0), limits = c(0, 10500))+
+  scale_x_date(date_breaks = '1 month', date_labels = "%b-%Y", expand = expansion(add = 2))+
   theme(axis.text.x=element_text(angle=60, hjust=1),
-        plot.title=element_text(family='Times', face="bold", 
-                                size=20,hjust = 0.5, vjust = 0.5),
+        plot.title=element_text(family='Times', face="bold", size=20,hjust = 0.5, vjust = 0.5),
         axis.text = element_text(family="Times", colour = "black"),
-        legend.text = element_text(family="Times", colour = "black", 
-                                   face = "bold"), 
-        legend.background = element_rect(fill = "#C1CDCD",linetype = 1, 
-                                         colour = "black", linewidth = 1),
-        legend.title = element_text(family="Times", colour = "black", 
-                                    face = "bold", size = 12),
-        panel.border = element_rect(colour = "black", fill = NA, 
-                                    linewidth = 2),)+
-  labs(title="New autism referrals each month by age from April 2019 - June 2022", 
-       x="Date", y="Number of Referrals Across England", fill = "Age Groups:")+
-  scale_fill_manual(values=c("#FF6A6A", "#FFA54F", "#FFEC8B", "#90EE90", 
-                             "#7EC0EE","#7A67EE","#FFF0F5"))+
+        legend.text = element_text(family="Times", colour = "black", face = "bold"), 
+        legend.background = element_rect(fill = "#C1CDCD",linetype = 1, colour = "black", linewidth = 1),
+        legend.title = element_text(family="Times", colour = "black", face = "bold", size = 12),
+        panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),)+
+  labs(title="New autism referrals each month by age from April 2019 - June 2022", x="Date", y="Number of Referrals Across England", fill = "Age Groups:")+
+  scale_fill_manual(values=c("#FF6A6A", "#FFA54F", "#FFEC8B", "#90EE90", "#7EC0EE","#7A67EE","#FFF0F5"))+
   geom_vline(xintercept = ref_age_date[lockdown1,1])+
-  annotate("text", x= ref_age_date[lockdown_text_placement,1], y=7600, 
-           label="Start of 1st Lockdown in England", angle=90)
+  annotate("text", x= ref_age_date[lockdown_text_placement,1], y=7600, label="Start of 1st Lockdown in England", angle=90)
 
 #viewing the bar chart
 plot(barplot)
@@ -193,16 +172,16 @@ ggsave(here("visualisations","viz220225546.png"),height = 8, width = 13)
 Finally, to emphasise the time course component of this data I animated the plot so that the data would be gradually revealed along the x-axis. This draws attention to trends over time in the data alongside differences in age-group proportions.
 
 
-```{r fig.show='animate', fig.width = 11, fig.asp = 0.6,interval = 0.1}
+```{r fig.width = 11, fig.asp = 0.6,interval = 0.1, warning = FALSE, message = FALSE}
 
 #creating an animated plot
-anim <- barplot + 
+anim2 <- barplot + 
   transition_states(REPORTING_PERIOD_START,transition_length = 2,
                     state_length = 1) + 
   shadow_mark() 
 
-#showing the animation
-anim
+#showing the plot
+anim2
 
 ```
 
@@ -213,9 +192,10 @@ There is a clear decrease in autism referrals after the initial COVID-19 lockdow
 
 However, this data is visualisation is limited in terms of its ability to answer the research question in that it only considers data from NHS CCGs (Clinical Commissioning Groups) and data submission is voluntary for non-NHS funded referrals. This means that data concerning private referrals is largely missing. People may be more likely to seek a private referral if they have struggled to obtain one from their NHS GP and as a result this may mean the referral numbers for adults is underestimated as autism is still traditionally seen as a condition only impacting or being diagnosed in children. 
 
-It would be interesting to see if this pattern varied geographically given that the data was recorded for each practice centre and so could be plotted onto a map or potentially to look at the breakdown of these results by sex as there is a disparity in the number of males vs females diagnosed with autism (generally ranging from 5:1-2:1 depending on the study, [Napolitano et al 2022](https://www.frontiersin.org/articles/10.3389/fpsyt.2022.889636/full#B4)) and it would be interesting to see if this is reflected by a similar trend for referrals or if this is a pattern that emerges at the assessment stage of diagnosis.  
+It would be interesting to see if this pattern varied geographically given that the data was recorded for each practice centre and so could be plotted onto a map or potentially to look at the breakdown of these results by sex as there is a disparity in the number of males vs females diagnosed with autism (generally ranging from 5:1-2:1 depending on the study, [Napolitano et al 2022(1)](https://www.frontiersin.org/articles/10.3389/fpsyt.2022.889636/full#B4)) and it would be interesting to see if this is reflected by a similar trend for referrals or if this is a pattern that emerges at the assessment stage of diagnosis.  
   
   
-###References:  
+###References:
 (1) - Napolitano, A., Schiavi, S., La Rosa, P., Rossi-Espagnet, M. C., Petrillo, S., Bottino, F., Tagliente, E., Longo, D., Lupi, E., Casula, L., Valeri, G., Piemonte, F., Trezza, V., & Vicari, S. (2022). Sex Differences in Autism Spectrum Disorder: Diagnostic, Neurobiological, and Behavioral Features. Frontiers in Psychiatry, 13. https://www.frontiersin.org/articles/10.3389/fpsyt.2022.889636
-  
+    
+     

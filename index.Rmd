@@ -6,9 +6,19 @@ date: "`r Sys.Date()`"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+#packages
 library(here)
 library(tidyverse)
 library(extrafont)
+library(ggplot2)
+library("data.table")
+library(extrafont)
+install.packages("kableExtra", repos = 'https://www.stats.bris.ac.uk/R/')
+install.packages('tinytex',repos = 'https://www.stats.bris.ac.uk/R/')
+tinytex::install_tinytex(force = TRUE)
+library(gganimate)
+install.packages("gifski")
 ```
 
 # **Changes in the number of referrals for autism diagnostic assessment before, during, and after lockdown in England by age group:**
@@ -21,13 +31,14 @@ The pandemic resulted in school closures and disruption in routine for most chil
 
 
 ![https://www.bbc.co.uk/news/uk-scotland-52618931](headline images/autismlockdownextrahard.png)
-*https://www.bbc.co.uk/news/uk-scotland-52618931*  
+*https://www.bbc.co.uk/news/uk-scotland-52618931* 
 ![https://www.bbc.co.uk/news/uk-england-tyne-60885874](headline images/schoolpupilautismrise.png)
 *https://www.bbc.co.uk/news/uk-england-tyne-60885874*  
 ![https://www.theguardian.com/society/2020/nov/11/siena-castellon-autistic-people-are-really-struggling-with-how-uncertain-things-are](headline images/autismstruggleuncertain.png)
 *https://www.theguardian.com/society/2020/nov/11/siena-castellon-autistic-people-are-really-struggling-with-how-uncertain-things-are*  
 ![https://www.theguardian.com/society/2021/mar/29/autism-more-common-in-children-in-england-than-previously-thought-study](headline images/autismmorecommon.png)
 *https://www.theguardian.com/society/2021/mar/29/autism-more-common-in-children-in-england-than-previously-thought-study*
+
 
 
 ## The Data:
@@ -70,7 +81,7 @@ Jul21_Jun22 <- read.csv(unz(here("data","Zipped_total_data.zip"),"July2021_June2
 
 #making a function
 fval_tail <- function(df,col_num,value) {
-  #find a value in the data fram that matches input, find the element number of the last 
+  #find a value in the data frame that matches input, find the element number of the last 
   #instance of this
   index <- which(df[,col_num] == value)
   output <- tail(index,1)
