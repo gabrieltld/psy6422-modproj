@@ -39,7 +39,7 @@ The pandemic resulted in school closures and disruption in routine for most chil
 ![https://www.theguardian.com/society/2021/mar/29/autism-more-common-in-children-in-england-than-previously-thought-study](headline images/autismmorecommon.png)
 *https://www.theguardian.com/society/2021/mar/29/autism-more-common-in-children-in-england-than-previously-thought-study*
 
-
+ 
 ## The Data:
 
 Data was taken from NHS digital who began publishing monthly statistics for the number of autism referrals (amongst other variables such as wait time) for practices in England. The data used here is the result of merging two datasets covering April 2019 - December 2021 and July 2021 - June 2022 and these datasets can be accessed via these links:  
