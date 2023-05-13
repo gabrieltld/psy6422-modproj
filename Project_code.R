@@ -10,12 +10,7 @@ install.packages("gganimate")
 install.packages("gifski")
 install.packages("png")
 
-#here is a link to the data - coding book is on these pages
-# https://digital.nhs.uk/data-and-information/publications/statistical/autism-statistics/april-2019-to-december-2021
-# https://digital.nhs.uk/data-and-information/publications/statistical/autism-statistics/july-2021-to-june-2022
-
-#add a function for repeating lines somehow or compress but ideally need a function
-
+#loading the data
 Apr19_Dec21 <- read.csv(unz(here("data","Zipped_total_data.zip"),"April2019_Dec2021.csv")) 
 Jul21_Jun22 <- read.csv(unz(here("data","Zipped_total_data.zip"),"July2021_June2022.csv"))
 

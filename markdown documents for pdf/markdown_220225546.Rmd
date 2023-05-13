@@ -19,10 +19,11 @@ install.packages('tinytex',repos = 'https://www.stats.bris.ac.uk/R/')
 tinytex::install_tinytex(force = TRUE)
 library(gganimate)
 ```
-
+  
 # **Changes in the number of referrals for autism diagnostic assessment before, during, and after lockdown in England by age group:**
-
-## Research Question
+  
+  
+## Research Question:
 
 How did the pandemic affect the number of referrals for autism assessments in NHS practices and did this vary by age? 
 
@@ -38,7 +39,7 @@ The pandemic resulted in school closures and disruption in routine for most chil
 ![https://www.theguardian.com/society/2021/mar/29/autism-more-common-in-children-in-england-than-previously-thought-study](headline images/autismmorecommon.png)
 *https://www.theguardian.com/society/2021/mar/29/autism-more-common-in-children-in-england-than-previously-thought-study*
 
-
+  
 ## The Data:
 
 Data was taken from NHS digital who began publishing monthly statistics for the number of autism referrals (amongst other variables such as wait time) for practices in England. The data used here is the result of merging two datasets covering April 2019 - December 2021 and July 2021 - June 2022 and these datasets can be accessed via these links:  
@@ -67,8 +68,8 @@ brief_glance
 The dataset comes from a larger dataset that is also from the NHS: the Mental Health Services Dataset. Data submissions by services are made for each patient whose care is funded fully or partially by the NHS and data submission is optional for services with patients who are not funded by the NHS.
 This means that individuals seeking private care or assessment are not included in this dataset.
 
-
-## Data preparation
+  
+## Data preparation:
 
 These datasets were very large and included metrics that this analysis was uninterested in and also had to be merged and duplications deleted. There were also some formatting changes necessary to make the data more understandable to R such as the conversion of data from character to date class. The final stage of this was to sum the referrals by age across practices as this analysis was not focused on region. The full process of data cleaning and pre-processing is illustrated below. 
 
@@ -119,8 +120,8 @@ ref_age_date <- data.frame(ref_age_date)
 
 ```
 
-
-## Initial visualisation
+  
+## Initial visualisation:
 
 I initially visualised the data using a scatter plot but found it difficult to interpret as the points were small and often overlapped, especially for the older age groups with smaller referral numbers.
  
@@ -166,7 +167,7 @@ barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,
                expand = expansion(add = 2))+
   theme(axis.text.x=element_text(angle=60, hjust=1),
         plot.title=element_text(family='Times', face="bold", 
-                                size=15,hjust = 0.5, vjust = 0.5),
+                                size=20,hjust = 0.5, vjust = 0.5),
         axis.text = element_text(family="Times", colour = "black"),
         legend.text = element_text(family="Times", colour = "black", 
                                    face = "bold"), 

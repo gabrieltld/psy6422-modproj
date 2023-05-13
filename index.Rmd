@@ -21,10 +21,11 @@ tinytex::install_tinytex(force = TRUE)
 library(gganimate)
 install.packages("gifski",repos = 'https://www.stats.bris.ac.uk/R/')
 ```
-
+  
 # **Changes in the number of referrals for autism diagnostic assessment before, during, and after lockdown in England by age group:**
-
-## Research Question
+  
+    
+## Research Question:
 
 How did the pandemic affect the number of referrals for autism assessments in NHS practices and did this vary by age? 
 
@@ -42,7 +43,7 @@ The pandemic resulted in school closures and disruption in routine for most chil
   
 ![https://www.theguardian.com/society/2021/mar/29/autism-more-common-in-children-in-england-than-previously-thought-study](markdown documents for pdf/headline images/autismmorecommon.png)
 *https://www.theguardian.com/society/2021/mar/29/autism-more-common-in-children-in-england-than-previously-thought-study*
-
+  
  
 ## The Data:
 
@@ -71,8 +72,8 @@ kableExtra:: kable_styling(tableh,bootstrap_options = c("striped", 'condensed', 
 The dataset comes from a larger dataset that is also from the NHS: the Mental Health Services Dataset. Data submissions by services are made for each patient whose care is funded fully or partially by the NHS and data submission is optional for services with patients who are not funded by the NHS.
 This means that individuals seeking private care or assessment are not included in this dataset.
 
-
-## Data preparation
+  
+## Data preparation:
 
 These datasets were very large and included metrics that this analysis was uninterested in and also had to be merged and duplications deleted. There were also some formatting changes necessary to make the data more understandable to R such as the conversion of data from character to date class. The final stage of this was to sum the referrals by age across practices as this analysis was not focused on region. The full process of data cleaning and pre-processing is illustrated below. 
 
@@ -118,8 +119,8 @@ ref_age_date <- data.frame(ref_age_date)
 
 ```
 
-
-## Initial visualisation
+  
+## Initial visualisation:
 
 I initially visualised the data using a scatter plot but found it difficult to interpret as the points were small and often overlapped, especially for the older age groups with smaller referral numbers.
  
@@ -157,7 +158,7 @@ barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,y=METRIC_VALUE)) +
   scale_y_continuous(breaks=seq(0,10500,500),expand = c(0,0), limits = c(0, 10500))+
   scale_x_date(date_breaks = '1 month', date_labels = "%b-%Y", expand = expansion(add = 2))+
   theme(axis.text.x=element_text(angle=60, hjust=1),
-        plot.title=element_text(family='Times New Roman', face="bold", size=15,hjust = 0.5, vjust = 0.5),
+        plot.title=element_text(family='Times New Roman', face="bold", size=20,hjust = 0.5, vjust = 0.5),
         axis.text = element_text(family="Times New Roman", colour = "black"),
         legend.text = element_text(family="Times New Roman", colour = "black", face = "bold"), 
         legend.background = element_rect(fill = "#C1CDCD",linetype = 1, colour = "black", linewidth = 1),
@@ -193,7 +194,7 @@ anim2
 
 ```
 
-
+  
 ## Conclusions:
  
 There is a clear decrease in autism referrals after the initial COVID-19 lockdown and a steady increase over the next two years resulting in a rough doubling of referral numbers between the last half of 2019 and the first half of 2022. The magnitude of the increase appears to be relatively similar for all age groups under 45; however, 45 - 54, 55 - 64 appear to be less affected although still seem to display some trend towards increase. 65+ year olds do not have enough referrals to be noticeable on the graph and this does not change over time indicating a relatively negligible contribution to autism referral numbers for NHS England.Therefore, lockdown and the post-lockdown period is associated with an approximate doubling of autism referral numbers for under 45s, a smaller increase in numbers for 45-64 year olds and no visible change in over 65s. 
