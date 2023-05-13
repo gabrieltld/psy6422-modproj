@@ -92,7 +92,7 @@ ggsave(here("visualisations","viz220225546.png"),height = 8, width = 13)
 barplot
 
 
-#animating the plot
+#animating the plot 
 anim <- barplot + 
   transition_states(REPORTING_PERIOD_START,transition_length = 2,state_length = 1) + 
   shadow_mark() 

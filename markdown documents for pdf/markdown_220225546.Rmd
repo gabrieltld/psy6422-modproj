@@ -1,9 +1,8 @@
 ---
-title: "Module Project"
+title: "Module Project - PSY6422"
 output: pdf_document
-date: "`r Sys.Date()`"
 header-includes:
-   - \usepackage{animate}
+   - \usepackage{animate} 
 ---
 
 ```{r setup, include=FALSE}
@@ -46,9 +45,8 @@ Data was taken from NHS digital who began publishing monthly statistics for the 
 *https://digital.nhs.uk/data-and-information/publications/statistical/autism-statistics/july-2021-to-june-2022*
 
 The data was recorded in this format:
-Note that column names were abbreviated for the sake of simplicity.
 
-```{r echo=FALSE, warning = FALSE, message = FALSE, options(warn=0)}
+```{r echo=FALSE, warning = FALSE, message = FALSE, comment = NA}
 
 #loading data
 Apr19_Dec21 <- read.csv(unz(here("data","Zipped_total_data.zip"),"April2019_Dec2021.csv")) 
@@ -63,6 +61,10 @@ brief_glance
 #kableExtra:: kable_styling(tableh,bootstrap_options = 
 #c("striped", 'condensed', "scale_down" ),position = "left", font_size = 10) 
 ```
+
+
+The dataset comes from a larger dataset that is also from the NHS: the Mental Health Services Dataset. Data submissions by services are made for each patient whose care is funded fully or partially by the NHS and data submission is optional for services with patients who are not funded by the NHS.
+This means that individuals seeking private care or assessment are not included in this dataset.
 
 
 ## Data preparation
@@ -193,7 +195,7 @@ ggsave(here("visualisations","viz220225546.png"),height = 8, width = 13)
 Finally, to emphasise the time course component of this data I animated the plot so that the data would be gradually revealed along the x-axis. This draws attention to trends over time in the data alongside differences in age-group proportions.
 
 
-```{r fig.show='animate', fig.width = 11, fig.asp = 0.6,interval = 0.1}
+```{r fig.show='animate', fig.width = 11, fig.asp = 0.6,interval = 0.1,echo=FALSE, warning = FALSE, message = FALSE, options(warn=0)}
 
 #creating an animated plot
 anim <- barplot + 
@@ -209,13 +211,13 @@ anim
 
 ## Conclusions:
  
-There is a clear decrease in autism referrals after the initial COVID-19 lockdown and a steady increase over the next two years resulting in a rough doubling of referral numbers between the last half of 2019 and the first half of 2022. The magnitude of the increase appears to be relatively similar for all age groups under 45; however, 45 - 54, 55 - 64 and 65+ year olds do not appear to show much change across time in terms of a clear trend towards either increase or decrease (although there is month-by-month variability).Therefore, lockdown and the post-lockdown period is associated with an approximate doubling of autism referral numbers for under 45s and no apparent change in over 45s. 
+There is a clear decrease in autism referrals after the initial COVID-19 lockdown and a steady increase over the next two years resulting in a rough doubling of referral numbers between the last half of 2019 and the first half of 2022. The magnitude of the increase appears to be relatively similar for all age groups under 45; however, 45 - 54, 55 - 64 appear to be less affected although still seem to display some trend towards increase. 65+ year olds do not have enough referrals to be noticeable on the graph and this does not change over time indicating a relatively negligible contribution to autism referral numbers for NHS England.Therefore, lockdown and the post-lockdown period is associated with an approximate doubling of autism referral numbers for under 45s, a smaller increase in numbers for 45-64 year olds and no visible change in over 65s. 
 
 However, this data is visualisation is limited in terms of its ability to answer the research question in that it only considers data from NHS CCGs (Clinical Commissioning Groups) and data submission is voluntary for non-NHS funded referrals. This means that data concerning private referrals is largely missing. People may be more likely to seek a private referral if they have struggled to obtain one from their NHS GP and as a result this may mean the referral numbers for adults is underestimated as autism is still traditionally seen as a condition only impacting or being diagnosed in children. 
 
-It would be interesting to see if this pattern varied geographically given that the data was recorded for each practice centre and so could be plotted onto a map or potentially to look at the breakdown of these results by sex as there is a disparity in the number of males vs females diagnosed with autism (generally ranging from 5:1-2:1 depending on the study, [Napolitano et al 2022](https://www.frontiersin.org/articles/10.3389/fpsyt.2022.889636/full#B4)) and it would be interesting to see if this is reflected by a similar trend for referrals or if this is a pattern that emerges at the assessment stage of diagnosis.  
+It would be interesting to see if this pattern varied geographically given that the data was recorded for each practice centre and so could be plotted onto a map. It would also be interesting to look at the breakdown of these results by sex as there is a disparity in the number of males vs females diagnosed with autism (generally ranging from 5:1-2:1 depending on the study, [Napolitano et al 2022(1)](https://www.frontiersin.org/articles/10.3389/fpsyt.2022.889636/full#B4)) and it would be interesting to see if this is reflected by a similar trend for referrals or if this is a pattern that emerges at the assessment stage of diagnosis.   
   
   
-###References:  
+### References:  
 (1) - Napolitano, A., Schiavi, S., La Rosa, P., Rossi-Espagnet, M. C., Petrillo, S., Bottino, F., Tagliente, E., Longo, D., Lupi, E., Casula, L., Valeri, G., Piemonte, F., Trezza, V., & Vicari, S. (2022). Sex Differences in Autism Spectrum Disorder: Diagnostic, Neurobiological, and Behavioral Features. Frontiers in Psychiatry, 13. https://www.frontiersin.org/articles/10.3389/fpsyt.2022.889636
   
