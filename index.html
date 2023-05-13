@@ -614,6 +614,14 @@ links:<br />
 <em><a href="https://digital.nhs.uk/data-and-information/publications/statistical/autism-statistics/july-2021-to-june-2022" class="uri">https://digital.nhs.uk/data-and-information/publications/statistical/autism-statistics/july-2021-to-june-2022</a></em></p>
 <p>The data was recorded in this format: Note that column names were
 abbreviated for the sake of simplicity.</p>
+<pre class="r"><code>#loading data
+Apr19_Dec21 &lt;- read.csv(unz(here(&quot;data&quot;,&quot;Zipped_total_data.zip&quot;),&quot;April2019_Dec2021.csv&quot;)) 
+brief_glance &lt;- head(Apr19_Dec21[Apr19_Dec21$METRIC == &#39;ASD12&#39; &amp; 
+                                   Apr19_Dec21$SECONDARY_LEVEL != &#39;NONE&#39;
+                                 &amp; Apr19_Dec21$METRIC_VALUE != &#39;*&#39;,], n=3)
+#showing table
+tableh &lt;- knitr::kable(head(brief_glance), &quot;html&quot;, col.names = c(&quot;RPS&quot;,&quot;RPE&quot;,&quot;S&quot;,&quot;B&quot;,&quot;PL&quot;,&quot;PLD&quot;,&quot;SL&quot;,&quot;SLD&quot;,&quot;M&quot;,&quot;MD&quot;,&quot;MV&quot;))
+kableExtra:: kable_styling(tableh,bootstrap_options = c(&quot;striped&quot;, &#39;condensed&#39;, &quot;scale_down&quot; ),position = &quot;left&quot;, font_size = 10) </code></pre>
 <table class="table table-striped table-condensed" style="font-size: 10px; ">
 <thead>
 <tr>

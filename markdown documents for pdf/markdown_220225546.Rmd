@@ -48,7 +48,7 @@ Data was taken from NHS digital who began publishing monthly statistics for the 
 
 The data was recorded in this format:
 
-```{r echo=FALSE, warning = FALSE, message = FALSE, comment = NA}
+```{r warning = FALSE, message = FALSE}
 
 #loading data
 Apr19_Dec21 <- read.csv(unz(here("data","Zipped_total_data.zip"),"April2019_Dec2021.csv")) 
@@ -59,7 +59,8 @@ brief_glance <- head(Apr19_Dec21[Apr19_Dec21$METRIC == 'ASD12' &
 brief_glance
 
 #below is the alternative code for html output that is not compatible with pdf
-#tableh <- knitr::kable(head(brief_glance), "html", col.names = c("RPS","RPE","S","B","PL","PLD","SL","SLD","M","MD","MV"))
+#tableh <- knitr::kable(head(brief_glance), "html", col.names =
+#c("RPS","RPE","S","B","PL","PLD","SL","SLD","M","MD","MV"))
 #kableExtra:: kable_styling(tableh,bootstrap_options = 
 #c("striped", 'condensed', "scale_down" ),position = "left", font_size = 10) 
 ```

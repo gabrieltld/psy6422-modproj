@@ -54,7 +54,7 @@ The data was recorded in this format:
 Note that column names were abbreviated for the sake of simplicity.
 
 
-```{r echo=FALSE, warning = FALSE, message = FALSE, options(warn=0)}
+```{r warning = FALSE, message = FALSE, options(warn=0)}
 
 #loading data
 Apr19_Dec21 <- read.csv(unz(here("data","Zipped_total_data.zip"),"April2019_Dec2021.csv")) 
