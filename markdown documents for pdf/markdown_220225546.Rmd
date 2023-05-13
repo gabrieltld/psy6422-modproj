@@ -208,6 +208,10 @@ anim <- barplot +
 #showing the animation
 anim
 
+#saving the animated plot as a gif - not necessary here but included for interest
+#barplot_anim_gif <- animate(anim,height = 8, width = 13, units = "in", res = 250, renderer #=gifski_renderer("barplot_gif", loop=TRUE))
+#anim_save(here("visualisations","barplot_anim_gif"))
+
 ```
 
 

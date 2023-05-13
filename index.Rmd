@@ -19,7 +19,6 @@ install.packages("kableExtra", repos = 'https://www.stats.bris.ac.uk/R/')
 install.packages('tinytex',repos = 'https://www.stats.bris.ac.uk/R/')
 tinytex::install_tinytex(force = TRUE)
 library(gganimate)
-install.packages("gifski",repos = 'https://www.stats.bris.ac.uk/R/')
 ```
   
 # **Changes in the number of referrals for autism diagnostic assessment before, during, and after lockdown in England by age group:**
@@ -184,13 +183,17 @@ Finally, to emphasise the time course component of this data I animated the plot
 ```{r fig.width = 11, fig.asp = 0.6,interval = 0.1, warning = FALSE, message = FALSE}
 
 #creating an animated plot
-anim2 <- barplot + 
+anim <- barplot + 
   transition_states(REPORTING_PERIOD_START,transition_length = 2,
                     state_length = 1) + 
   shadow_mark() 
 
 #showing the plot
-anim2
+anim
+
+#saving the animated plot as a gif - not necessary here but included for interest
+#barplot_anim_gif <- animate(anim,height = 8, width = 13, units = "in", res = 250, renderer #=gifski_renderer("barplot_gif", loop=TRUE))
+#anim_save(here("visualisations","barplot_anim_gif"))
 
 ```
 
