@@ -10,9 +10,10 @@ knitr::opts_chunk$set(echo = TRUE)
 #packages
 library(here)
 library(tidyverse)
+install.packages('extrafont', repos = 'https://www.stats.bris.ac.uk/R/')
 library(extrafont)
+font_import()
 library("data.table")
-library(extrafont)
 install.packages("kableExtra", repos = 'https://www.stats.bris.ac.uk/R/')
 install.packages('tinytex',repos = 'https://www.stats.bris.ac.uk/R/')
 tinytex::install_tinytex(force = TRUE)
@@ -165,7 +166,7 @@ barplot <- ggplot(ref_age_date, aes(x=REPORTING_PERIOD_START,
                expand = expansion(add = 2))+
   theme(axis.text.x=element_text(angle=60, hjust=1),
         plot.title=element_text(family='Times', face="bold", 
-                                size=20,hjust = 0.5, vjust = 0.5),
+                                size=15,hjust = 0.5, vjust = 0.5),
         axis.text = element_text(family="Times", colour = "black"),
         legend.text = element_text(family="Times", colour = "black", 
                                    face = "bold"), 
@@ -220,4 +221,6 @@ It would be interesting to see if this pattern varied geographically given that 
   
 ### References:  
 (1) - Napolitano, A., Schiavi, S., La Rosa, P., Rossi-Espagnet, M. C., Petrillo, S., Bottino, F., Tagliente, E., Longo, D., Lupi, E., Casula, L., Valeri, G., Piemonte, F., Trezza, V., & Vicari, S. (2022). Sex Differences in Autism Spectrum Disorder: Diagnostic, Neurobiological, and Behavioral Features. Frontiers in Psychiatry, 13. https://www.frontiersin.org/articles/10.3389/fpsyt.2022.889636
+  
+
   
